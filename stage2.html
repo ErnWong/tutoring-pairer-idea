@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutoring Pairer - Stage 2</title>
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
+    <style>
+      body {
+        padding: 2em;
+      }
+      .code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        color: #333;
+      }
+      #peopleInput {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      section {
+        /*display: none;*/
+      }
+      #sec1 {
+        display: block;
+      }
+      .person {
+        border: 1px solid #ddd;
+        background-color: #f5f5f5;
+        padding: 10px;
+        position: absolute;
+        width: 200px;
+        cursor: move;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none;   /* Chrome/Safari/Opera */
+        -khtml-user-select: none;    /* Konqueror */
+        -moz-user-select: none;      /* Firefox */
+        -ms-user-select: none;       /* Internet Explorer/Edge */
+        user-select: none;
+      }
+      .person:hover {
+        background-color: #fff;
+        border-color: #eee;
+      }
+      .person:active {
+        border-color: #555;
+        /*box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 3px ;*/
+      }
+      .person p {
+        margin: 0;
+      }
+      .pdays {
+        display: flex;
+        justify-content: space-between;
+      }
+      .form {
+        float: right;
+      }
+      .daycol {
+        display: inline-block;
+        width: 500px;
+        margin: 2em;
+        background-color: #fafafa;
+        min-height: 400px;
+      }
+      .daycol:first-of-type {
+        margin-left: 0;
+      }
+      .daycol:last-child {
+        margin-right: 0;
+      }
+      .daycol h5 {
+        text-align: center;
+        padding: 0.5em;
+        background-color: #eee;
+        margin: 0 0 1em;
+      }
+      #sec2 {
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Tutoring Pairer - Stage 2: Pairing</h3>
+    <section id="sec1">
+      <h4>Step 1. Input</h4>
+      <p>Paste the JSON code below:</p>
+      <textarea class="well well-small code" id="peopleInput" rows="10"></textarea><br />
+      <button class="btn" id="next1">Next</button>
+    </section>
+    <div class="person">
+      <p><span class="name">Bob</span><span class="form">8ABC</span></p>
+      <p class="pdays">
+        <span>M</span>
+        <span>T</span>
+        <span>W</span>
+        <span>T</span>
+        <span>F</span>
+      </p>
+    </div>
+    <section id="sec2">
+      <h4>Step 2. Pairing</h4>
+      <div class="daycol" id="people">
+        <h5>People</h5>
+      </div>
+      <div class="daycol" id="col-mon">
+        <h5>Monday</h5>
+      </div>
+      <div class="daycol" id="col-tue">
+        <h5>Tuesday</h5>
+      </div>
+      <div class="daycol" id="col-wed">
+        <h5>Wednesday</h5>
+      </div>
+      <div class="daycol" id="col-thu">
+        <h5>Thursday</h5>
+      </div>
+      <div class="daycol" id="col-fri">
+        <h5>Friday</h5>
+      </div>
+    </section>
+    <script>
+      let people = null;
+      document.getElementById("next1").addEventListener("click", function() {
+        document.getElementById("sec1").style.display = 'none';
+        document.getElementById("sec2").style.display = 'block';
+        people = JSON.parse(document.getElementById('peopleInput').value);
+        for (let p of people) {
+          p.div = document.createElement('div');
+          p.div.className = 'person';
+          let elName = document.createElement('span');
+          elName.innerText = p['Name'];
+          elName.classNae = 'name';
+          let elForm = document.createElement('span');
+          elForm.innerText = p['Form Class'];
+          elForm.className = 'form';
+          let elTop = document.createElement('p');
+          elTop.appendChild(elName);
+          elTop.appendChild(elForm);
+          p.div.appendChild(elTop);
+          p.elDays = {};
+          let elDays = document.createElement('p');
+          elDays.className = 'pdays';
+          'Mon Tue Wed Thu Fri'
+            .split(' ').forEach(function(day) {
+              let elDay = document.createElement('span');
+              elDay.innerText = day[0];
+              elDay.style.visibility = p[day]? 'visibile' : 'hidden';
+              elDays.appendChild(elDay);
+              p.elDays[day.toLowerCase()] = elDay;
+            });
+          p.div.appendChild(elDays);
+          document.getElementById("people").appendChild(p.div);
+        }
+      });
+    </script>
+  </body>
+</html>

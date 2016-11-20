@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutoring Pairer - Stage 1</title>
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
+    <script src="js/jsoneditor.js"></script>
+    <style>
+      body {
+        padding: 2em;
+      }
+      input[type=text] {
+        width: initial !important;
+      }
+      #people-editor > div > div {
+        display: inline-block;
+        padding-bottom: 9px !important;
+        min-width: 100%;
+      }
+      td, th {
+        text-align: center !important;
+      }
+      .code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        color: #333;
+      }
+      #people-valid {
+        margin-left: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="people-editor"></div>
+    <h4>Output <span id="people-valid"></span></h4>
+    <p>Once complete, copy the JSON code below, then proceed to <a href="stage2.html">stage 2</a>, and paste the code there.</p>
+    <pre id="people-json"></pre>
+    <!--<textarea class="well well-small code" id="people-json"></textarea>-->
+    <script>
+      let schema = {
+        "title":"Tutoring Pairer - Stage 1: Input",
+        "type":"array",
+        "format":"table",
+        "items":{
+          "type":"object",
+          "properties":{
+            "Name":{
+              "type":"string"
+            },
+            "Form Class":{
+              "type":"string"
+            },
+            "Mon":{
+              "type":"boolean",
+              "format":"checkbox"
+            },
+            "Tue":{
+              "type":"boolean",
+              "format":"checkbox"
+            },
+            "Wed":{
+              "type":"boolean",
+              "format":"checkbox"
+            },
+            "Thu":{
+              "type":"boolean",
+              "format":"checkbox"
+            },
+            "Fri":{
+              "type":"boolean",
+              "format":"checkbox"
+            },
+            "Notes":{
+              "type":"string"
+            },
+            "Subjects":{
+              "type":"array",
+              "format":"table",
+              "items":{
+                "type":"object",
+                "properties":{
+                  "Subject":{
+                    "type":"string"
+                  },
+                  "Level":{
+                    "type":"string"
+                  },
+                  "As Tutor":{
+                    "type":"boolean",
+                    "format":"checkbox"
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+      let peopleEditorDiv = document.getElementById('people-editor');
+      let peopleEditorOut = document.getElementById('people-json');
+      let peopleEditorValid = document.getElementById('people-valid');
+      let peopleEditor = new JSONEditor(peopleEditorDiv, {
+        schema: schema,
+        theme: 'bootstrap2',
+        iconlib: 'fontawesome4'
+      });
+      peopleEditor.on('change', function() {
+          let json = peopleEditor.getValue();
+          peopleEditorOut.innerText = JSON.stringify(json,null,2);
+          let isValid = peopleEditor.validate().length === 0;
+          peopleEditorValid.className = isValid? 'label label-success' : 'label label-warning';
+          peopleEditorValid.textContent = isValid? 'valid' : 'not valid';
+      });
+    </script>
+  </body>
+</html>
